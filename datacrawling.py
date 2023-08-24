@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup as bs
 from urllib.request import Request, urlopen
 import pandas as pd
@@ -71,8 +71,8 @@ class MovieRankingAnalyzer:
                     break
                 counts = len(movie_comments)
                 times += 1
-                if times % 100 == 0:
-                    print(str(movie_name) + ' ' + str(times) + ' 회 실행했습니다')
+                if times % 50 == 0:
+                    print(str(times) + ' 회 실행했습니다')
                 
                 self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", to_scroll)
                 time.sleep(3)
