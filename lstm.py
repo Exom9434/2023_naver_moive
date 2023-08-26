@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-class LSTM(torch.nn.Moudule):
-    def __init__(self,input_size, word2vec_size, hidden_size, num_classes, num_layers = 2, dropout = 0 ):
+class Model(torch.nn.Module):
+    def __init__(self,input_size, word2vec_size, hidden_size, num_classes, num_layers = 2, dropout = 0):
         super().__init__()
         self.input_size = input_size
         self.word2vec_size = word2vec_size
@@ -15,12 +15,12 @@ class LSTM(torch.nn.Moudule):
         self.emb = nn.Embedding(input_size, word2vec_size)
         self.lstm = nn.LSTM(input_size = word2vec_size,
                             hidden_size = hidden_size,
-                            num_layers = num_layers
+                            num_layers = num_layers,
                             dropout = dropout,
                             batch_first = True,
         )
         
-        self.linear = nn.linear(hidden_size, num_classes)
+        self.linear = nn.Linear(hidden_size, num_classes)
         self.activation = nn.Softmax(dim=-1)
         
     def forward(self, x):
@@ -33,3 +33,7 @@ class LSTM(torch.nn.Moudule):
         #|y| = batch_size,length,num_classes       
         
         return y
+    
+    def _init_state(self, batch_size=1):
+        weight = next(self.parameters()).data
+        return weight.new(self.n_layers, batch_size, self.hidden_dim).zero_()

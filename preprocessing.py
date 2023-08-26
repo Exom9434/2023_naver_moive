@@ -31,17 +31,27 @@ class Preprocessor:
         processed_sentences = [self.clean_text(sentence) for sentence in self.sentences]
         return processed_sentences
     
-    def tokenizer(self, data):
+    def tokenizer(self, data, vocab_size = 2000):
         comments = []
         for comment in data["comments"]:
             comments.append(comment)
         with open("comments.txt", "w", encoding="utf8") as f:
                 f.write('\n'.join(self.df["comments"]))
-        spm.SentencePieceTrainer.Train("--input=comments.txt \
-                                        --model_prefix=tokenized \
-                                        --vocab_size=5000 \
-                                        --model_type=bpe \
-                                        ")
+        spm.SentencePieceTrainer.Train(
+            f"--input=comments.txt \
+            --model_prefix=tokenized \
+            --pad_id=0  \
+            --pad_piece=<pad> \
+            --unk_id=1 \
+            --unk_piece=<unk> \
+            --bos_id=2 \
+            --bos_piece=<s> \
+            --eos_id=3 \
+            --eos_piece=</s> \
+            --vocab_size={vocab_size} \
+            --model_type=bpe"
+            )
+        
         sp = spm.SentencePieceProcessor()
         vocab_file = "tokenized.model"
         sp.load(vocab_file)
