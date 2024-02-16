@@ -31,7 +31,7 @@ class Preprocessor:
         processed_sentences = [self.clean_text(sentence) for sentence in self.sentences]
         return processed_sentences
     
-    def tokenizer(self, data, vocab_size = 2000):
+    def tokenizer(self, data, vocab_size = 1500):
         comments = []
         for comment in data["comments"]:
             comments.append(comment)
